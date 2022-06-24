@@ -7,7 +7,9 @@ package it.polito.tdp.PremierLeague;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.PremierLeague.model.Avversari;
 import it.polito.tdp.PremierLeague.model.Model;
+import it.polito.tdp.PremierLeague.model.TopPlayer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -44,7 +46,23 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+    	txtResult.clear();
+    	String goal=this.txtGoals.getText();
+    	double goals=0.0;
+    	if(goal.length()==0) {
+    		txtResult.appendText("Inserisci un valore numerico per la ricerca");
+    		return;
+    	}
+    	try {
+    		goals=Double.parseDouble(goal);
+    	}catch(NumberFormatException n) {
+    		throw new NumberFormatException("Inserisci un valore numerico nella txtGoals");
+    	}
+    	this.model.creaGrafo(goals);
+    	txtResult.appendText("GRAFO CREATO \n");
+    	txtResult.appendText("Numero vertici : "+this.model.nVertici()+"\n");
+    	txtResult.appendText("Numero archi : "+this.model.nArchi());
+    	
     }
 
     @FXML
@@ -54,7 +72,14 @@ public class FXMLController {
 
     @FXML
     void doTopPlayer(ActionEvent event) {
-
+    	txtResult.clear();
+    	TopPlayer top= this.model.getTopPlayer();
+    	txtResult.appendText("Giocatore Migliore : "+top.toString()+"\n");
+    	txtResult.appendText("\n");
+    	txtResult.appendText("Lista dei giocatori sconfitti: \n");
+    	for(Avversari a : top.getAvversari()) {
+    		txtResult.appendText(a.toString()+"\n");
+    	}
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
